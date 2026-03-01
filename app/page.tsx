@@ -22,19 +22,12 @@ const getEnvVar = (name, fallback) => {
 };
 
 const firebaseConfig = {
-
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
-
+  apiKey: getEnvVar('NEXT_PUBLIC_FIREBASE_API_KEY', "AIzaSyAQjE1VDakVB5fd4m_8Y3z0WxQghdlx7So"),
+  authDomain: getEnvVar('NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN', "tax-website-8f42f.firebaseapp.com"),
+  projectId: getEnvVar('NEXT_PUBLIC_FIREBASE_PROJECT_ID', "tax-website-8f42f"),
+  storageBucket: getEnvVar('NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET', "tax-website-8f42f.firebasestorage.app"),
+  messagingSenderId: getEnvVar('NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID', "323971199499"),
+  appId: getEnvVar('NEXT_PUBLIC_FIREBASE_APP_ID', "1:323971199499:web:154c916e49579c0c51cd0e")
 };
 
 const app = initializeApp(firebaseConfig.apiKey ? firebaseConfig : {
@@ -425,9 +418,15 @@ const StatusBadge = ({ status }) => {
 };
 
 const TicketTile = ({ ticket, onClick }) => {
-  const dateObj = ticket.createdAt?.toDate ? ticket.createdAt.toDate() : new Date();
-  const dateStr = dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-  const timeStr = dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+  // Created At formatting
+  const createdObj = ticket.createdAt?.toDate ? ticket.createdAt.toDate() : new Date();
+  const createdDateStr = createdObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  const createdTimeStr = createdObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+  // Last Updated formatting (fallback to createdObj if missing)
+  const updatedObj = ticket.lastUpdate?.toDate ? ticket.lastUpdate.toDate() : createdObj;
+  const updatedDateStr = updatedObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  const updatedTimeStr = updatedObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
   return (
     <div 
@@ -451,11 +450,18 @@ const TicketTile = ({ ticket, onClick }) => {
         </div>
       </div>
       
-      <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0">
-        <div className="text-xs text-slate-400 flex items-center gap-1">
-          <Calendar size={12}/> {dateStr} &middot; {timeStr}
+      <div className="flex sm:flex-col items-start sm:items-end justify-between gap-2 border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0 min-w-[150px]">
+        <div className="flex flex-col sm:items-end gap-1.5 w-full">
+          <div className="text-xs text-slate-500 flex items-center gap-1.5">
+            <Calendar size={12} className="text-slate-400"/> 
+            <span>Created: <span className="font-medium text-slate-700">{createdDateStr} &middot; {createdTimeStr}</span></span>
+          </div>
+          <div className="text-[10px] text-slate-400 flex items-center gap-1.5">
+            <Clock size={10} className="text-slate-300"/> 
+            <span>Updated: {updatedDateStr} &middot; {updatedTimeStr}</span>
+          </div>
         </div>
-        <div className="text-[10px] text-slate-400 font-mono">
+        <div className="text-[10px] text-slate-400 font-mono hidden sm:block mt-1">
           ID: {ticket.ticketNumber || 'UNKNOWN'}
         </div>
       </div>
