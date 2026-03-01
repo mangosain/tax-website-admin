@@ -22,12 +22,12 @@ const getEnvVar = (name, fallback) => {
 };
 
 const firebaseConfig = {
-  apiKey: getEnvVar('NEXT_PUBLIC_FIREBASE_API_KEY', "AIzaSyAQjE1VDakVB5fd4m_8Y3z0WxQghdlx7So"),
-  authDomain: getEnvVar('NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN', "tax-website-8f42f.firebaseapp.com"),
-  projectId: getEnvVar('NEXT_PUBLIC_FIREBASE_PROJECT_ID', "tax-website-8f42f"),
-  storageBucket: getEnvVar('NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET', "tax-website-8f42f.firebasestorage.app"),
-  messagingSenderId: getEnvVar('NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID', "323971199499"),
-  appId: getEnvVar('NEXT_PUBLIC_FIREBASE_APP_ID', "1:323971199499:web:154c916e49579c0c51cd0e")
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig.apiKey ? firebaseConfig : {
